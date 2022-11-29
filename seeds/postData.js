@@ -1,0 +1,28 @@
+[
+    {
+        "title": "Enter the Zuckerverse",
+        "description": "Is the world really ready for Zuckerverse? Here at Facebook, we truly believe so. Together in the Zuckerverse we can create the perfect utopia where no one will feel left out. Join us today!",
+        "user_id": "1",
+        "id": "1"
+    },
+    {
+        "title": "How to make money fast",
+        "description": "All you need is 10 mining setups and you can make over $10k a day.",
+        "user_id": "2",
+        "id": "2"
+    },
+    {
+        "title": "Why are 'Gacha' games are so popular",
+        "description": "People love to gamble and it shows. We are natural born risk takers. We love the chance to get something big, even at the risk of losing something. In this case, we lose our self-control and $$$.",
+        "user_id": "3",
+        "id": "3"
+    },
+    {
+        "title": "Why I switched to a tech career",
+        "description": "WFH FTW. Many tech companies offer remote or hybrid postitions, generally have higher base pay than other entry-level degree requiring jobs, and are always looking for new faces. Technology is always evolving and advancing, so job security is not an issue. ",
+        "user_id": "4",
+        "id": "4"
+    },
+    
+]
+
