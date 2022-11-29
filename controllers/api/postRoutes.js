@@ -3,15 +3,13 @@ const { Post } = require('../../models');
 const checkAuth = require('../../utils/auth');
 
 // CREATE new post
-router.post('/', checkAuth, async (req, res) => {
+router.post('/newpost', checkAuth, async (req, res) => {
     try {
       const newPost = await Post.create({
-        id: req.body.id,
-        title: req.body.title,
-        contents: req.body.contents,
+        ...req.body,
         user_id:req.session.userID,
       });
-      res.json(newPost);
+      res.status(200).end();
     } catch (err) {
       res.status(500).json(err);
     }
@@ -20,17 +18,19 @@ router.post('/', checkAuth, async (req, res) => {
   // Edit post
   router.put('/:id', checkAuth, async (req, res) => {
     try {
-      const [updatedPost] = await Post.update(req.body, {
+      const updatedPost = await Post.update(req.body, {
         where: {
           id: req.params.id,
         },
       });
 
-      if (updatedPost > 0) {
-        res.status(200).end();
-      } else {
-        res.status(404).end();
+      if (!updatedPost) {
+        res.status(404).json({message: 'No posts with this id '});
+        return;
       }
+
+      res.status(200).end();
+
     } catch (err) {
       res.status(500).json(err);
     }
@@ -39,17 +39,18 @@ router.post('/', checkAuth, async (req, res) => {
   // Delete post
   router.delete('/:id', withAuth, async (req, res) => {
     try {
-      const [updatedPost] = Post.destroy({
+      const destPost = Post.destroy({
         where: {
           id: req.params.id,
+          user_id: req.session.user_id,
         },
       });
   
-      if (updatedPost > 0) {
-        res.status(200).end();
-      } else {
-        res.status(404).end();
+      if (!destPost) {
+        res.status(404).json({message: 'No posts with this id '});
+        return;
       }
+      res.status(200).json(destPost);
     } catch (err) {
       res.status(500).json(err);
     }
