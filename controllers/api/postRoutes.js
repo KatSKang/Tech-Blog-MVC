@@ -37,7 +37,7 @@ router.post('/newpost', checkAuth, async (req, res) => {
   });
 
   // Delete post
-  router.delete('/:id', withAuth, async (req, res) => {
+  router.delete('/:id', checkAuth, async (req, res) => {
     try {
       const destPost = Post.destroy({
         where: {
