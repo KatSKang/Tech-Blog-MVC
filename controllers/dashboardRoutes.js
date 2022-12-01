@@ -1,46 +1,45 @@
 const router = require("express").Router();
-const { Post } = require("../models");
+const { Post } = require("../models/");
 const withAuth = require("../utils/auth");
 
-router.get("/dashboard", withAuth, async (req, res) => {
+router.get("/", withAuth, async (req, res) => {
   try {
     const postData = await Post.findAll({
       where: {
-        userId: req.session.user_id,
+        userId: req.session.userId,
       },
     });
 
-    const posts = postData.get({ plain: true });
+    const posts = postData.map((post) => post.get({ plain: true }));
 
     res.render("dashboard", {
       posts,
-      loggedIn: true,
     });
   } catch (err) {
     res.redirect("login");
   }
 });
 
-// router.get("/new", withAuth, (req, res) => {
-//   res.render("newpost");
-// });
+router.get("/new", withAuth, (req, res) => {
+  res.render("dashboard", {});
+});
 
-// router.get("/edit/:id", withAuth, async (req, res) => {
-//   try {
-//     const postData = await Post.findByPk(req.params.id);
+router.get("/edit/:id", withAuth, async (req, res) => {
+  try {
+    const postData = await Post.findByPk(req.params.id);
 
-//     if (postData) {
-//       const post = postData.get({ plain: true });
+    if (postData) {
+      const post = postData.get({ plain: true });
 
-//       res.render("editpost", {
-//         post,
-//       });
-//     } else {
-//       res.status(404).end();
-//     }
-//   } catch (err) {
-//     res.redirect("login");
-//   }
-// });
+      res.render("dashboard", {
+        post,
+      });
+    } else {
+      res.status(404).end();
+    }
+  } catch (err) {
+    res.redirect("login");
+  }
+});
 
 module.exports = router;

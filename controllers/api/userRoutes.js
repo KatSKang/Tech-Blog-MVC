@@ -43,17 +43,16 @@ router.post("/login", async (req, res) => {
 
     req.session.save(() => {
       req.session.user_email = findUser.user_email;
+      req.session.username = findUser.user_username;
       req.session.user_id = findUser.user_id;
       req.session.loggedIn = true;
-
-      res.json({ user: findUser, message: "You are now logged in" });
+      res.json({ user: findUser, message: "You are logged in" });
     });
   } catch (err) {
     res.status(400).json(err);
   }
 });
 
-//User logout function
 router.post("/logout", (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy(() => {

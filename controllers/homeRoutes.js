@@ -1,72 +1,71 @@
 const router = require("express").Router();
 const { Post, User, Comment } = require("../models");
 
-// Get all posts for homepage
+// get all posts for homepage
 router.get("/", async (req, res) => {
   try {
     const postData = await Post.findAll({
-      include: [
-        {
-          Model: User,
-          attributes: ["username"],
-        },
-      ],
+      include: [User],
     });
 
-    res.render("homepage", { postData });
+    const posts = postData.map((post) => post.get({ plain: true }));
+
+    res.render("homepage", { posts });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// Get single post
+// get single post
 router.get("/post/:id", async (req, res) => {
   try {
-    const postData = await Post.findByPk(req.params.id, {
+    const userPosts = await Post.findByPk(req.params.id, {
       raw: true,
       nest: true,
       include: [
         {
           model: Comment,
-          attributes: ["content"],
+          attributes: ["comments"],
         },
         {
           model: User,
-          attribute: ["username"],
+          attributes: ["username"],
         },
       ],
     });
 
-    const commentData = await Comment.findAll({
+    const allComment = await Comment.findAll({
       raw: true,
       nest: true,
-      where: { post_id: post.id },
+      where: { post_id: userPosts.id },
       include: [
         {
           model: User,
-          attribute: ["username"],
+          attributes: ["username"],
         },
       ],
     });
-
-    res.render("singlepost", { postData, commentData, loggedIn: true });
+    // res.status(200).json(blogIdData);
+    // console.log("** allComment",allComment)
+    res.render("singlepost", {
+      userPosts,
+      allComment,
+      loggedIn: req.session.loggedIn,
+    });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// Login route
 router.get("/login", (req, res) => {
-  // If the user is already logged in, redirect to the homepage
   if (req.session.loggedIn) {
     res.redirect("/");
     return;
   }
-  // Otherwise, render the 'login' template
+
   res.render("login");
 });
 
-// Signup route
 router.get("/signup", (req, res) => {
   if (req.session.loggedIn) {
     res.redirect("/");
