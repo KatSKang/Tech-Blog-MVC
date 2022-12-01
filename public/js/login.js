@@ -12,11 +12,13 @@ const loginFormHandler = async (event) => {
     });
 
     if (response.ok) {
-      document.location.replace("/");
+      document.location.replace("/homepage");
     } else {
       alert("Failed to log in.");
     }
   }
 };
 
-document.querySelector('#login-submit').addEventListener('click', loginFormHandler);
+document
+  .querySelector("#login-submit")
+  .addEventListener("click", loginFormHandler);
