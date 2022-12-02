@@ -24,7 +24,14 @@
   ## Deployment
   
   Deployed Heroku application: https://intense-meadow-37447.herokuapp.com/
+  
+  ![image](https://user-images.githubusercontent.com/105574653/205253011-cc49cea0-9ff3-434d-9066-5c0e608099ee.png)
+  
+  ![image](https://user-images.githubusercontent.com/105574653/205253073-622f9cb3-d32c-4a70-be13-dab161640d78.png)
 
+  ![image](https://user-images.githubusercontent.com/105574653/205253120-ce6fe0f6-8202-47b9-ba66-0d264f23123f.png)
+
+  
   ## Credits
 
   StackOverflow
