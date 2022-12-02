@@ -2,7 +2,7 @@
 
   ## Description
 
-  This application is a simple CMS-style blog where users can post blogs, view other users' blogs and write comments. This application focuses on using Node.js, Express, Sequelize, Handlebars, connect-session-sequelize to run the app.
+  This application is a simple CMS-style blog where users can post blogs, view other users' blogs and write comments. This application focuses on using Node.js, Express, Sequelize, Handlebars, connect-session-sequelize to run the app. TailwindCSS was used for the styling.
 
   ## Table of Contents
   
