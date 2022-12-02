@@ -6,20 +6,26 @@ const signupFormHandler = async (event) => {
   const password = document.querySelector("#password-signup").value.trim();
 
   if (username && email && password) {
-    const response = await fetch("/api/users/signup", {
+    const response = await fetch("/api/users", {
       method: "POST",
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
       headers: { "Content-Type": "application/json" },
     });
 
     if (response.ok) {
       document.location.replace("/");
     } else {
-      alert("Failed to sign up.");
+      alert(
+        "Error creating account. Must have valid email and password length of at least 6 characters."
+      );
     }
   }
 };
 
 document
-  .querySelector("#signup-form")
+  .querySelector("#signup-submit")
   .addEventListener("click", signupFormHandler);

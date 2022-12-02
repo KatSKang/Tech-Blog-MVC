@@ -54,7 +54,10 @@ router.get("/post/:id", withAuth, (req, res) => {
       if (postData) {
         const post = postData.get({ plain: true });
 
-        res.render("singlepost", { post });
+        res.render("singlepost", {
+          post,
+          logged_in: req.session.logged_in,
+        });
       } else {
         res.status(404).end();
       }
