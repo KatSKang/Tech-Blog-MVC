@@ -15,7 +15,7 @@
       <div
         class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
       >
-        <a href="#" class="flex items-center">
+        <a href="/" class="flex items-center">
           <h1
             class="mb-4 mr-6 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"
           >The<span
@@ -25,7 +25,7 @@
 
         </a>
         <div class="flex items-center lg:order-2">
-          {{#if loggedIn}}
+          {{#if logged_in}}
             <button
               type="button"
               id="logout"
@@ -99,7 +99,7 @@
     </main>
 
     <!-- If the user is logged in, load the JS script for when they logout -->
-    {{#if loggedIn}}
+    {{#if logged_in}}
       <script src="../js/logout.js"></script>
     {{/if}}
   </body>

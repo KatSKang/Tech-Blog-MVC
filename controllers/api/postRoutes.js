@@ -6,44 +6,43 @@ router.post("/", withAuth, async (req, res) => {
   const body = req.body;
 
   try {
-    const newPost = await Post.create({ ...body, userId: req.session.userId });
+    const newPost = await Post.create({
+      ...body,
+      user_id: req.session.user_id,
+    });
     res.json(newPost);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.put("/:id", withAuth, async (req, res) => {
+router.put("/edit/:id", withAuth, async (req, res) => {
   try {
-    const [affectedRows] = await Post.update(req.body, {
-      where: {
-        id: req.params.id,
-      },
+    const updatePost = await Post.update(req.body, {
+      where: { id: req.params.id, user_id: req.session.user_id },
     });
 
-    if (affectedRows > 0) {
-      res.status(200).end();
-    } else {
-      res.status(404).end();
-    }
+    res.status(200).json(updatePost);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json(err);
   }
 });
 
 router.delete("/:id", withAuth, async (req, res) => {
   try {
-    const [affectedRows] = Post.destroy({
+    const postData = await Post.destroy({
       where: {
         id: req.params.id,
+        user_id: req.session.user_id,
       },
     });
 
-    if (affectedRows > 0) {
-      res.status(200).end();
-    } else {
-      res.status(404).end();
+    if (!postData) {
+      res.status(404).json({ message: "Could not find post" });
+      return;
     }
+
+    res.status(200).json(postData);
   } catch (err) {
     res.status(500).json(err);
   }

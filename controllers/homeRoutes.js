@@ -1,64 +1,71 @@
 const router = require("express").Router();
 const { Post, User, Comment } = require("../models");
+const withAuth = require("../utils/auth");
 
 // get all posts for homepage
 router.get("/", async (req, res) => {
   try {
+    // Get all projects and JOIN with user data
     const postData = await Post.findAll({
-      include: [User],
+      include: [
+        {
+          model: User,
+          attributes: ["username"],
+        },
+      ],
     });
 
+    // Serialize data so the template can read it
     const posts = postData.map((post) => post.get({ plain: true }));
 
-    res.render("homepage", { posts });
+    // Pass serialized data and session flag into template
+    res.render("homepage", {
+      posts,
+      logged_in: req.session.logged_in,
+    });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 // get single post
-router.get("/post/:id", async (req, res) => {
-  try {
-    const userPosts = await Post.findByPk(req.params.id, {
-      raw: true,
-      nest: true,
-      include: [
-        {
-          model: Comment,
-          attributes: ["comments"],
-        },
-        {
+router.get("/post/:id", withAuth, (req, res) => {
+  Post.findOne({
+    where: {
+      id: req.params.id,
+    },
+    attributes: ["id", "description", "title", "date_created"],
+    include: [
+      {
+        model: User,
+        attributes: ["username"],
+      },
+      {
+        model: Comment,
+        attributes: ["id", "comments", "post_id", "user_id", "date_created"],
+        include: {
           model: User,
           attributes: ["username"],
         },
-      ],
-    });
+      },
+    ],
+  })
+    .then((postData) => {
+      if (postData) {
+        const post = postData.get({ plain: true });
 
-    const allComment = await Comment.findAll({
-      raw: true,
-      nest: true,
-      where: { post_id: userPosts.id },
-      include: [
-        {
-          model: User,
-          attributes: ["username"],
-        },
-      ],
+        res.render("singlepost", { post });
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((err) => {
+      res.status(500).json(err);
     });
-    // res.status(200).json(blogIdData);
-    // console.log("** allComment",allComment)
-    res.render("singlepost", {
-      userPosts,
-      allComment,
-      loggedIn: req.session.loggedIn,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
 });
 
 router.get("/login", (req, res) => {
-  if (req.session.loggedIn) {
+  if (req.session.logged_in) {
     res.redirect("/");
     return;
   }
@@ -67,7 +74,7 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/signup", (req, res) => {
-  if (req.session.loggedIn) {
+  if (req.session.logged_in) {
     res.redirect("/");
     return;
   }

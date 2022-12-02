@@ -1,30 +1,22 @@
  <div class="block max-w-l m-1 p-6 bg-white border-t-8 border-gray-200 shadow-md dark:bg-gray-800 dark:border-green-700">
-        <h5 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{{userPosts.title}}</h5> </a>
-        <h6 class=" font-medium mb-2 text-gray-700 dark:text-green-600">Posted by: {{userPosts.user.username}} on {{format_date userPosts.date_created}}</h6>
-        <p class="p-4 m-2 font-medium text-3xl text-gray-700 dark:text-gray-200 border-2 border-gray-400 rounded-lg">{{userPosts.description}}</p>
+        <h5 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{{post.title}}</h5> </a>
+        <h6 class=" font-medium mb-2 text-gray-700 dark:text-green-600">Posted by: {{post.user.username}} on {{format_date post.date_created}}</h6>
+        <p class="p-4 m-2 font-medium text-3xl text-gray-700 dark:text-gray-200 border-2 border-gray-400 rounded-lg">{{post.description}}</p>
     </div>
     
     
-    <section class="block max-w-l m-4 p-6 bg-white border-t-8 border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-green-700">
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Comments</h5>
-        {{#each allComment as |comment|}}
-        <div class="block max-w-l m-1 p-6 bg-white border-t-4 border-gray-200 rounded-lg shadow-md dark:bg-gray-700 dark:border-green-700">
-            <p class="font-medium text-gray-300"> {{comment.comments}} </p>
-            <p class="font-medium text-xs text-green-600">by {{comment.user.username}}, {{format_date comment.date_created}}</p>
-        </div>
-        {{/each}}
-    </section>
+{{>postcomments post.comments}}
     
 
         <form>
            <div class="max-w-l m-4 border border-green-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-green-700">
-            <input type="hidden" name="post-id" value="{{post.id}}" />
+            <input type="hidden" id="post-id" value="{{post.id}}" />
                <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                    <label for="comment" class="sr-only">Your comment</label>
                    <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea>
                </div>
                <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                   <button type="submit" id="comment-btn" class="inline-flex items-center py-2.5 px-4 text-s font-medium text-center text-white bg-green-700 rounded-lg focus:ring-4 focus:ring-green-200 dark:focus:ring-green-900 hover:bg-green-800">
+                   <button type="click" onclick="addComment()" name="{{post.id}}" id="comment-btn" class="inline-flex items-center py-2.5 px-4 text-s font-medium text-center text-white bg-green-700 rounded-lg focus:ring-4 focus:ring-green-200 dark:focus:ring-green-900 hover:bg-green-800">
                        Post comment
                    </button>
                </div>
